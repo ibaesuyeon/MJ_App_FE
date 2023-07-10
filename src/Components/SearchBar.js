@@ -1,11 +1,12 @@
 import { StyleSheet, TextInput, View, Image } from 'react-native';
-import { MAIN, GRAY } from '../Colors';
+import { MAIN, GRAY, BLACK } from '../Colors';
 import PropTypes from 'prop-types';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import search_icon from '../../assets/search_icon.png';
+import Icon_FA from 'react-native-vector-icons/FontAwesome';
 
 const SearchBar = () => {
   return (
@@ -17,19 +18,22 @@ const SearchBar = () => {
         autoCorrect={false}
         width="94%"
       />
-      <Image source={search_icon} style={styles.logo} />
+      <Icon_FA
+        name="search"
+        color={BLACK}
+        size={18}
+        style={[styles.logo, styles.header_right]}
+      />
     </View>
   );
 };
-SearchBar.propTypes = {
-  placeholder: PropTypes.string.isRequired,
-};
+
 SearchBar.defaultProps = {
   onPress: '',
 };
 const styles = StyleSheet.create({
   searchbar: {
-    width: '100%',
+    width: wp('90%'),
     height: hp('5%'),
     backgroundColor: '#F6F6F6',
     paddingHorizontal: 10,
@@ -45,6 +49,8 @@ const styles = StyleSheet.create({
   },
   rowWrapper: {
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
