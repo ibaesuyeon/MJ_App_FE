@@ -1,20 +1,28 @@
-// import { createNativeStackNavigator } from '@react-navigation/native-stack';
-// import { AuthRoutes } from './routes';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { AuthRoutes } from './routes';
 
-// import MainPage from '../Screens/MainScreen';
+import MainScreen from '../Screens/MainScreen';
+import WelcomeScreen from '../Screens/WelcomeScreen/WelcomeScreen';
+import WelCampusScreen from '../Screens/WelcomeScreen/WelCampusScreen';
+import WelSYearScreen from '../Screens/WelcomeScreen/WelSYearScreen';
+import WelEndScreen from '../Screens/WelcomeScreen/WelEndScreen';
 
-// const Stack = createNativeStackNavigator();
-// const AuthStack = () => {
-//   return (
-//     <Stack.Navigator
-//       screenOptions={{
-//         contentStyle: { backgroundColor: '#fff' },
-//         headerShown: false,
-//       }}
-//     >
-//       <Stack.Screen name={AuthRoutes.MAIN} component={MainPage} />
-//     </Stack.Navigator>
-//   );
-// };
+const Stack = createNativeStackNavigator();
+const AuthStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        contentStyle: { backgroundColor: '#fff' },
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name={AuthRoutes.WELCOME} component={WelcomeScreen} />
+      <Stack.Screen name={AuthRoutes.WEL_CAMPUS} component={WelCampusScreen} />
+      <Stack.Screen name={AuthRoutes.WEL_SYear} component={WelSYearScreen} />
+      <Stack.Screen name={AuthRoutes.WEL_End} component={WelEndScreen} />
+      <Stack.Screen name={AuthRoutes.MAIN} component={MainScreen} />
+    </Stack.Navigator>
+  );
+};
 
-// export default AuthStack;
+export default AuthStack;

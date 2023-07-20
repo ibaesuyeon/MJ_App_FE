@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import HeaderLeftButton from '../components/HeaderLeftButton';
 // import HeaderRightButton from '../components/HeaderRightButton';
 import MainScreen from '../Screens/MainScreen';
+
 import { WHITE } from '../Colors';
 
 const Stack = createNativeStackNavigator();
@@ -18,6 +19,7 @@ const MainStack = () => {
       }}
     >
       <Stack.Screen name={'Main'} component={MainScreen} />
+
     </Stack.Navigator>
   );
 };
