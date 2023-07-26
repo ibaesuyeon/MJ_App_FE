@@ -6,9 +6,8 @@ import { BLACK, WHITE } from '../Colors';
 import HeaderLeftButton from '../Components/HeaderLeftButton';
 import HeaderRightButton from '../Components/HeaderRightButton';
 
-const Stack = createNativeStackNavigator();
-
 const MainStack = () => {
+  const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
       screenOptions={{
