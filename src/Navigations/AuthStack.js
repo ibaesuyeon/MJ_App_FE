@@ -1,7 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthRoutes } from './routes';
 
-import MainScreen from '../Screens/MainScreen';
 import WelcomeScreen from '../Screens/WelcomeScreen/WelcomeScreen';
 import WelCampusScreen from '../Screens/WelcomeScreen/WelCampusScreen';
 import WelSYearScreen from '../Screens/WelcomeScreen/WelSYearScreen';
@@ -20,7 +19,6 @@ const AuthStack = () => {
       <Stack.Screen name={AuthRoutes.WEL_CAMPUS} component={WelCampusScreen} />
       <Stack.Screen name={AuthRoutes.WEL_SYear} component={WelSYearScreen} />
       <Stack.Screen name={AuthRoutes.WEL_End} component={WelEndScreen} />
-      <Stack.Screen name={AuthRoutes.MAIN} component={MainScreen} />
     </Stack.Navigator>
   );
 };
