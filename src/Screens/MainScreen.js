@@ -18,11 +18,10 @@ import {
 import { Divider } from '@rneui/themed';
 import { BLACK, GRAY } from '../Colors';
 import MJ_logo from '../../assets/MJ_logo.png';
-import three_horizontal_line from '../../assets/three_horizontal_line.png';
-import user from '../../assets/user.png';
 import Icon_Ft from 'react-native-vector-icons/Feather';
 
 const MainScreen = () => {
+  // function MainScreen() {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -31,22 +30,6 @@ const MainScreen = () => {
     >
       <Pressable style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
-          {/* <View style={[styles.header, styles.rowWrapper]}>
-              <Icon_Ft
-                name="menu"
-                color={BLACK}
-                size={30}
-                style={[styles.logo, styles.header_left]}
-              />
-              <Image source={MJ_logo} style={styles.logo} />
-              <Text style={styles.header_title}>명지대학교</Text>
-              <Icon_Ft
-                name="user"
-                color={BLACK}
-                size={30}
-                style={[styles.logo, styles.header_right]}
-              />
-            </View> */}
           <SearchBar placeholder="공지사항 검색"></SearchBar>
           <View style={styles.rowWrapper}>
             <Image source={MJ_logo} style={styles.logo} />
