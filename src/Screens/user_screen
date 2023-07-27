@@ -1,0 +1,115 @@
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+const App = () => {
+  // 사용자가 미리 지정한 정보
+  const campus = '캠퍼스 정보';
+  const college = '단과대학 정보';
+  const department = '학부 정보';
+  const major = '학과 정보';
+  const grade = '학년 정보';
+
+  const handleEditProfile = () => {
+    console.log('사용자 정보 수정 클릭됨');
+    
+  };
+
+  const handleDeleteAccount = () => {
+    console.log('계정 삭제 클릭됨');
+    
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.headerText}>사용자 환경</Text>
+      <View style={styles.separatorContainer}>
+        <View style={styles.separator} />
+      </View>
+      <TouchableOpacity
+        style={styles.editProfileButton}
+        onPress={handleEditProfile}
+      >
+        <Text style={styles.editProfileText}>사용자 정보 수정</Text>
+      </TouchableOpacity>
+      <View style={styles.box}>
+      <Text style={styles.campusText}>{campus}</Text>
+      </View>
+      <View style={styles.box}>
+      <Text style={styles.campusText}>{college}</Text>
+      </View>
+      <View style={styles.box}>
+      <Text style={styles.campusText}>{department}</Text>
+      </View>
+      <View style={styles.box}>
+      <Text style={styles.campusText}>{major}</Text>
+      </View>
+      <View style={styles.box}>
+      <Text style={styles.campusText}>{grade}</Text>
+      </View>
+      <View style={styles.separatorContainer}>
+        <View style={styles.separator} />
+      </View>
+      <TouchableOpacity
+        style={styles.deleteAccountButton}
+        onPress={handleDeleteAccount}
+      >
+        <Text style={styles.deleteAccountText}>계정 삭제</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingHorizontal: 16,
+    paddingTop: 24,
+  },
+  headerText: {
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: 'bold',
+    top:hp('5%')
+  },
+  separatorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: 'gray',
+  },
+  editProfileButton: {
+    alignSelf: 'flex-end',
+    marginBottom: 16,
+    bottom:hp('8%'),
+    right:wp('3%')
+  },
+  editProfileText: {
+    color: 'blue',
+    fontSize: 18,
+  },
+  box: {
+    backgroundColor: '#F8F8F8',
+    padding: 16,
+    marginBottom: 8,
+    width : wp('80%'),
+    borderRadius:10
+  },
+  
+  deleteAccountButton: {
+    marginTop: 16,
+    bottom:hp('10%')
+  },
+  deleteAccountText: {
+    color: 'red',
+    fontSize: 18,
+    
+  },
+  campusText:{
+    textAlign:'center',
+  },
+});
+
+export default App;
