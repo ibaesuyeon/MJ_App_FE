@@ -91,9 +91,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
+    backgroundColor: 'WHITE',
   },
   contentBackground: {
     backgroundColor: '#f6f6f6',
+    // backgroundColor: 'WHITE',
     borderRadius: 10,
   },
   wideContent: {
