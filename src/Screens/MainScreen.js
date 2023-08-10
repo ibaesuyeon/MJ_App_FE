@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Pressable,
   SafeAreaView,
+  TouchableOpacity,
   Image,
 } from 'react-native';
 import SearchBar from '../Components/SearchBar';
@@ -19,8 +20,11 @@ import { Divider } from '@rneui/themed';
 import { BLACK, GRAY } from '../Colors';
 import MJ_logo from '../../assets/MJ_logo.png';
 import Icon_Ft from 'react-native-vector-icons/Feather';
+import { AuthRoutes } from '../Navigations/routes';
 
 const MainScreen = () => {
+  const navigation = useNavigation();
+
   // function MainScreen() {
   return (
     <KeyboardAvoidingView
@@ -42,9 +46,11 @@ const MainScreen = () => {
             </Text>
           </View>
           <View style={styles.rowWrapper}>
-            <View style={[styles.contentBackground, styles.mediumContent]}>
-              <Text style={styles.contentTitle}>명지대학교 공지사항</Text>
-            </View>
+            <TouchableOpacity  onPress={() => navigation.navigate(AuthRoutes.NORMALNOTICE)}>
+              <View style={[styles.contentBackground, styles.mediumContent]}>
+                <Text style={styles.contentTitle}>명지대학교 공지사항</Text>
+              </View>
+            </TouchableOpacity>
             <View style={styles.columnWrapper}>
               <View style={[styles.contentBackground, styles.smallContent]}>
                 <Text style={styles.contentTitle}>단과대별 공지사항 </Text>
@@ -55,6 +61,12 @@ const MainScreen = () => {
             </View>
           </View>
           <Divider />
+          <View style={[styles.contentBackground, styles.menuContent]}></View>
+          <Text style={styles.headLine2}>이수학점</Text>
+          <TouchableOpacity  onPress={() => navigation.navigate(AuthRoutes.CREDIT)}>
+            <View style={[styles.contentBackground, styles.mapContent]}></View>
+          </TouchableOpacity>
+
           <View style={[styles.contentBackground, styles.menuContent]}></View>
           <Text style={styles.headLine2}>캠퍼스맵</Text>
           <View style={[styles.contentBackground, styles.mapContent]}></View>
