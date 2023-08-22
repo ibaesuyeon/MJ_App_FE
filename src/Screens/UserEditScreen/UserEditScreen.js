@@ -10,25 +10,17 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthRoutes } from '../../Navigations/routes';
 
 import {CAMPUSITEM,SEOULMAJOR,YONGINMAJOR,SEOULMAJORHUMANITIES,SEOULMAJORSocialScience,SEOULMAJORManagement,
-  SEOULMAJORLAW,SEOULMAJORICT,SEOULMAJORFUTURE,YONGINMAJORNATURAL,YONGINMAJORTECH,YONGINMAJORARTPHY,
-  YONGINMAJORARCHITECTURE,YONGINMAJORINTER, YONGINMAJORICT} from '../../Components/major'
+  SEOULMAJORLAW,SEOULMAJORICT,SEOULMAJORFUTURE,SEOULMAJORBANGMOK,YONGINMAJORNATURAL,YONGINMAJORTECH,YONGINMAJORARTPHY,
+  YONGINMAJORARCHITECTURE,YONGINMAJORBANGMOK,YONGINMAJORINTER, YONGINMAJORICT} from '../../Components/major'
 
 const WelCampusScreen = () => {
-
-  const getDeviceInfo = () => {
-    setUserId(Constants.installationId);
-
-    // 기기 정보 출력하기
-    console.log('deviceId:', Constants.installationId);
-
-  };
-
-  const [userId, setUserId] = useState('');
   const navigation = useNavigation();
 
+  const [userdbId, setUserdbId] = useState('');
   const [campusValue, setCampusValue] = useState('');
   const [marjorValue, setMajorValue] = useState('');
   const [detailMarjorValue, setDetailMajorValue] = useState('');
+  const [yearValue, setYearValue] = useState('');
 
   const handleCampusChange  = (value) => {
     setCampusValue(value);
@@ -39,23 +31,39 @@ const WelCampusScreen = () => {
   const handleDetailMajorChange  = (value) => {
     setDetailMajorValue(value);
   };
+  const handleYearChange  = (value) => {
+    setYearValue(value);
+  };
+
+  useEffect( () => {
+    axios.get(`http://192.168.200.128:8080/user/user/device/${Constants.installationId}`)
+  .then(response => {
+    console.log(response.data);
+    console.log(response.data.data.userId);
+    setUserdbId(response.data.data.userId);
+    console.log("ID:"+userdbId);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+  },[])
 
   const saveUserInfofirst = async () => {
-    console.log("저장로그");
+    console.log("수정로그");
     try{
-      const response = await axios.post('http://192.168.200.128:8080/user/user/register', {
-        deviceId: Constants.installationId,
-        year: 99,
+      const response = await axios.put(`http://192.168.200.128:8080/user/user/modify/${userdbId}`, {
+        userId: userdbId,
+        year: yearValue,
         userCampusId: campusValue,
         userCollegeId: marjorValue,
         userMajorId: detailMarjorValue,
         userUnivId: 1,
       }
       );
-      console.log("저장완료");
+      console.log("수정완료");
 
       //저장 완료 후 넘어가게
-      navigation.navigate(AuthRoutes.WEL_SYear);
+      navigation.navigate(AuthRoutes.MAIN);
     }catch(e){
       console.log(e.response.data);
       console.log(e.message);
@@ -64,7 +72,7 @@ const WelCampusScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>전공을 알려주세요!</Text>
+      <Text style={styles.text}>수정할 정보를 입력해주세요!</Text>
       <View>
         <View style={styles.selectedOptionView}>
           <Text style={styles.selectedOptionName}>캠퍼스</Text>
@@ -140,6 +148,14 @@ const WelCampusScreen = () => {
             items={SEOULMAJORICT}
             value={detailMarjorValue}
           />
+          ):marjorValue=='13'?(
+            <RNPickerSelect
+            placeholder={""}
+            style={pickerSelectStyles}
+            onValueChange={handleDetailMajorChange}
+            items={SEOULMAJORBANGMOK}
+            value={detailMarjorValue}
+          />
           ):marjorValue=='6'?(
             <RNPickerSelect
             placeholder={""}
@@ -188,7 +204,7 @@ const WelCampusScreen = () => {
             items={YONGINMAJORICT}
             value={detailMarjorValue}
           />
-          ):(
+          ):marjorValue=='12'?(
             <RNPickerSelect
             placeholder={""}
             style={pickerSelectStyles}
@@ -196,13 +212,37 @@ const WelCampusScreen = () => {
             items={YONGINMAJORINTER}
             value={detailMarjorValue}
           />
+          ):(
+            <RNPickerSelect
+            placeholder={"14"}
+            style={pickerSelectStyles}
+            onValueChange={handleDetailMajorChange}
+            items={YONGINMAJORBANGMOK}
+            value={detailMarjorValue}
+          />
           )}
+        </View>
+        <View style={styles.selectedOptionView}>
+          <Text style={styles.selectedOptionName}>학년</Text>
+          <RNPickerSelect
+            style={pickerSelectStyles}
+            onValueChange={handleYearChange}
+            placeholder={""}
+            items={[
+              { label: '1학년', value: '1' },
+              { label: '2학년', value: '2' },
+              { label: '3학년', value: '3' },
+              { label: '4학년', value: '4' },
+              { label: '4학년 이상', value: '5' },
+            ]}
+            value={yearValue}
+          />
         </View>
 
       </View>
       <StatusBar style="auto" />
       <Button 
-      title={'다음'}
+      title={'수정하기'}
       types={'MainButton'}
       onPress={saveUserInfofirst}
       />

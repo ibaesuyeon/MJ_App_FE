@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Button from '../../Components/Button';
 import RNPickerSelect from 'react-native-picker-select';
+import axios from 'axios';
 
 import Constants from 'expo-constants';
 
@@ -11,39 +12,7 @@ import { AuthRoutes } from '../../Navigations/routes';
 
 const WelSYearScreen = () => {
 
-  const [userId, setUserId] = useState('');
   const [userdbId, setUserdbId] = useState('');
-
-  const getDeviceInfo = () => {
-    setUserId(Constants.installationId);
-
-    // 기기 정보 출력하기
-    console.log('deviceId:', Constants.installationId);
-
-  };
-
-  useEffect( () => {
-    getDeviceInfo();
-
-    axios.get(`http://localhost:8000/user/user/device/${userId}`)
-  .then(response => {
-    console.log(response.data);
-    setUserdbId(response.data.userId);
-  })
-  .catch(error => {
-    if (error.response) {
-      // 서버 응답이 도착한 경우
-      console.log(error.response.data); // 서버가 응답한 데이터
-      console.log(error.response.status); // 응답 상태 코드
-    } else if (error.request) {
-      // 서버 응답이 없는 경우 (네트워크 오류)
-      console.log('Network Error:', error.message);
-    } else {
-      // 그 외의 오류
-      console.log('Error:', error.message);
-    }
-  });
-  },[])
 
   const navigation = useNavigation();
   const [yearValue, setYearValue] = useState('');
@@ -52,16 +21,34 @@ const WelSYearScreen = () => {
     setYearValue(value);
   };
 
+  useEffect( () => {
+    axios.get(`http://192.168.200.128:8080/user/user/device/${Constants.installationId}`)
+  .then(response => {
+    console.log(response.data);
+    console.log(response.data.data.userId);
+    setUserdbId(response.data.data.userId);
+    console.log("ID:"+userdbId);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+  },[])
+
   const saveUserInfo = async () => {
 
     try{
-      const response = await axios.post(`http://localhost:8080/user/user/modifyYear/${userdbId}`, {
+      console.log(userdbId);
+      console.log(yearValue);
+      const response = await axios.put(`http://192.168.200.128:8080/user/user/modifyYear/${userdbId}`, {
         userId: userdbId,
         year: yearValue,
       }
       );
+
+      navigation.navigate(AuthRoutes.WEL_End);
     }catch(e){
       console.log(e.response.data);
+      console.log("변경x");
     }
   };
 
@@ -70,16 +57,17 @@ const WelSYearScreen = () => {
       <Text style={styles.text}>몇 학년이신가요?</Text>
       <StatusBar style="auto" />
       <View style={styles.selectedOptionView}>
-          <Text style={styles.selectedOptionName}>캠퍼스</Text>
+          <Text style={styles.selectedOptionName}>학년</Text>
           <RNPickerSelect
             style={pickerSelectStyles}
             onValueChange={handleYearChange}
+            placeholder={""}
             items={[
-              { label: '1학년', value: '1학년' },
-              { label: '2학년', value: '2학년' },
-              { label: '3학년', value: '3학년' },
-              { label: '4학년', value: '4학년' },
-              { label: '4학년 이상', value: '1학년 이상' },
+              { label: '1학년', value: '1' },
+              { label: '2학년', value: '2' },
+              { label: '3학년', value: '3' },
+              { label: '4학년', value: '4' },
+              { label: '4학년 이상', value: '5' },
             ]}
             value={yearValue}
           />
@@ -87,7 +75,7 @@ const WelSYearScreen = () => {
       <Button 
       title={'완료'}
       types={'MainButton'}
-      onPress={() => {saveUserInfo, navigation.navigate(AuthRoutes.WEL_End)}}
+      onPress={saveUserInfo}
       />
     </View>
   );

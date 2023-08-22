@@ -13,18 +13,23 @@ import {
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Constants from 'expo-constants';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute  } from '@react-navigation/native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { Button, Overlay, Icon, Input, BottomSheet, ListItem   } from '@rneui/themed';
+import { Button, Overlay, Icon, Input, BottomSheet, ListItem} from '@rneui/themed';
+import { AuthRoutes } from '../../Navigations/routes';
 
-const UserCourseScreen = () => {
-  const [page, setPage] = useState("1학년 1학기")
+const UserCourseFirstScreen = () => {
+  const navigation = useNavigation();
+
   const [visible, setVisible] = useState(false);
   const [visibleGrade, setVisibleGrade] = useState(false);
   const [grade, setGrade] = useState("--");
+
+      const [data, setData] = useState([]);
+
 
 const toggleOverlay = () => {
   setVisible(!visible);
@@ -34,24 +39,30 @@ const toggleOverlayGrade = () => {
   setVisibleGrade(!visibleGrade);
 };
 
+const changeSemesterPage = (changeYear, changeSemester) => {
+  navigation.navigate(AuthRoutes.USERTIMETABLE2, {data: { years: changeYear,
+    semesters: changeSemester}})
+};
+
 const [isVisible, setIsVisible] = useState(false);
+
 const list = [
   { title: '1학년 1학기',
-  onPress: () => {setPage("1학년 1학기"),setIsVisible(false)} },
+  onPress: () => {changeSemesterPage("1","1"),setIsVisible(false)} },
   { title: '1학년 2학기',
-  onPress: () =>{setPage("1학년 2학기"),setIsVisible(false)} },
+  onPress: () =>{changeSemesterPage("1","2"),setIsVisible(false)} },
   { title: '2학년 1학기',
-  onPress: () => {setPage("2학년 1학기"),setIsVisible(false)} },
+  onPress: () => {changeSemesterPage("2","1"),setIsVisible(false)} },
   { title: '2학년 2학기',
-  onPress: () => {setPage("2학년 2학기"),setIsVisible(false)} },
+  onPress: () => {changeSemesterPage("2","2"),setIsVisible(false)} },
   { title: '3학년 1학기',
-  onPress: () => {setPage("3학년 1학기"),setIsVisible(false)} },
+  onPress: () => {changeSemesterPage("3","1"),setIsVisible(false)} },
   { title: '3학년 2학기',
-  onPress: () => {setPage("3학년 2학기"),setIsVisible(false)} },
+  onPress: () => {changeSemesterPage("3","2"),setIsVisible(false)} },
   { title: '4학년 1학기',
-  onPress: () => {setPage("4학년 1학기"),setIsVisible(false)} },
+  onPress: () => {changeSemesterPage("4","1"),setIsVisible(false)} },
   { title: '4학년 2학기',
-  onPress: () => {setPage("4학년 2학기"),setIsVisible(false)} },
+  onPress: () => {changeSemesterPage("4","2"),setIsVisible(false)} },
 
   {
     title: 'Cancel',
@@ -60,6 +71,33 @@ const list = [
     onPress: () => setIsVisible(false),
   },
 ];
+
+useEffect( () => {
+
+  axios.get(`http://192.168.200.128:8080/user/user/device/${Constants.installationId}`)
+.then(response => {
+  const userId = response.data.data.userId;
+
+  console.log(userId);
+  
+  axios.get(`http://192.168.200.128:8080/grade/${userId}/1/1학기`)
+  .then(response => {
+    const data = response.data;
+    console.log(data);
+    const objects = [];
+    console.log("됨");
+  })
+  .catch(error => {
+    console.log(error.response.data)
+    
+    console.log("안됨");
+  });
+
+})
+.catch(error => {
+  console.log(error);
+});
+},[])
 
   // function CreditScreen() {
   return (
@@ -74,23 +112,40 @@ const list = [
         <View style={styles.container}>
           <View style={styles.timetable}>
             <View style={styles.timetablename}>
-              <Text style={styles.timetablenametext}>{page} 시간표</Text>
+              <Text style={styles.timetablenametext}>1학년 1학기 시간표</Text>
             </View>
             <View style={styles.timetablecourse}>
- 
-                <View
-                style={[
-                  styles.contentBackground,
-                  styles.totalCredit,
-                  styles.rowWrapper,
-                ]}
-                >
-                  <Text numberOfLines={1} style={styles.CurrentCreditTitle}>절차적사고와 프로그래밍</Text>
-                  <Text style={styles.CurrentCreditdetail}>3학점</Text>
-                  <TouchableOpacity style={styles.button} onPress={toggleOverlayGrade}>
-                    <Text style={styles.buttonText}>{grade}</Text>
-                  </TouchableOpacity>
-                </View>
+
+                  <View
+                  style={[
+                    styles.contentBackground,
+                    styles.totalCredit,
+                    styles.rowWrapper,
+                  ]}
+                  >
+                    <Text numberOfLines={1} style={styles.CurrentCreditTitle}>절차적사고와 프로그래밍</Text>
+                    <Text style={styles.CurrentCreditdetail}>3학점</Text>
+                    <TouchableOpacity style={styles.button} onPress={toggleOverlayGrade}>
+                      <Text style={styles.buttonText}>{grade}</Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* {data.map((item) => (
+                  <View
+                  style={[
+                    styles.contentBackground,
+                    styles.totalCredit,
+                    styles.rowWrapper,
+                  ]}
+                  >
+                    <Text numberOfLines={1} style={styles.CurrentCreditTitle}>{item.courseName}</Text>
+                    <Text style={styles.CurrentCreditdetail}>{item.credit}</Text>
+                    <TouchableOpacity style={styles.button} onPress={toggleOverlayGrade}>
+                      <Text style={styles.buttonText}>{item.grade}</Text>
+                    </TouchableOpacity>
+                  </View>
+                ))} */}
+
             </View>
               <Button
                   title="강의 추가하기"
@@ -109,7 +164,7 @@ const list = [
                 />
               <Overlay overlayStyle={{ width: wp('90%')}} isVisible={visible} onBackdropPress={toggleOverlay}>
               <Input placeholder='강의 제목 입력'/>
-              <Input placeholder='학점 입력'/>
+              <Input placeholder='학점 입력(숫자만 입력해주세요!)'/>
               <Button
                 buttonStyle={{
                   backgroundColor: 'black',
@@ -372,4 +427,4 @@ const styles = StyleSheet.create({
   },
   
 });
-export default UserCourseScreen;
+export default UserCourseFirstScreen;
