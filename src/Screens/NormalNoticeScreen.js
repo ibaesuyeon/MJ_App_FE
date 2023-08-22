@@ -1,27 +1,100 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Keyboard,
   StyleSheet,
   View,
-  Platform,
   Text,
+  Platform,
   KeyboardAvoidingView,
   Pressable,
-  SafeAreaView,
-  Image,
+  FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import SearchBar from '../Components/SearchBar';
-import { useNavigation } from '@react-navigation/native';
+import NoticeBtn from '../Components/NoticeBtn';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { Divider } from '@rneui/themed';
-import { BLACK, GRAY } from '../Colors';
-import MJ_logo from '../../assets/MJ_logo.png';
-import Icon_Ft from 'react-native-vector-icons/Feather';
+import { WHITE, GRAY } from '../Colors';
+import { useIsFocused } from '@react-navigation/native';
 
 const NormalNoticeScreen = () => {
-  // function NormalNoticeScreen() {
+  const [loading, setLoading] = useState(false);
+  const [category, setCategory] = useState('일반공지');
+  const [data, setData] = useState([]);
+  const [keyword, setKeyword] = useState('');
+  const isFocused = useIsFocused();
+
+  const handleSearch = async (keyword) => {
+    setLoading(true);
+    try {
+      let response;
+      if (keyword.trim() === '') {
+        response = await axios.get(
+          `http://192.168.123.109:8080/notice/${encodeURIComponent(category)}`
+        );
+      } else {
+        response = await axios.get(
+          `http://192.168.123.109:8080/notice/${encodeURIComponent(
+            category
+          )}/search/${encodeURIComponent(keyword)}`
+        );
+      }
+      printData(response);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+    setLoading(false);
+  };
+
+  const printData = (response) => {
+    const notices = response.data;
+    const objects = [];
+    // 데이터에서 객체를 추출하여 배열에 추가
+    for (let i = 0; i < notices.list.length; i++) {
+      const obj = {
+        noticeId: notices.list[i].noticeId,
+        num: notices.list[i].num,
+        category: notices.list[i].category,
+        title: notices.list[i].title,
+        pubDate: notices.list[i].pubDate,
+        link: notices.list[i].link,
+      };
+      objects.push(obj);
+    }
+    setData(objects);
+  };
+
+  const printNoData = () => {
+    return (
+      <View style={(styles.noDataContainer, styles.columnWrapper)}>
+        <Text style={styles.noDataText}>
+          검색어와 일치하는 검색 결과가 없습니다.
+        </Text>
+        <View style={{ marginTop: 10 }}>
+          <View style={styles.noDataSubTextContainer}>
+            <Text style={styles.noDataSubText}>· </Text>
+            <Text style={styles.noDataSubText}>
+              단어의 철자와 띄어쓰기가 정확한지 확인해주세요.
+            </Text>
+          </View>
+          <View style={styles.noDataSubTextContainer}>
+            <Text style={styles.noDataSubText}>· </Text>
+            <Text style={styles.noDataSubText}>
+              검색어의 단어 수를 줄이거나 다른 검색어를 검색해보세요.
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  useEffect(() => {
+    handleSearch(keyword);
+  }, [keyword, isFocused]); //keyword가 변할 때마다
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -30,57 +103,19 @@ const NormalNoticeScreen = () => {
     >
       <Pressable style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
-          <SearchBar placeholder="공지사항 검색"></SearchBar>
-          <View style={[styles.contentBackground, styles.wideContent]}>
-            <Text style={styles.NoticeTitle}>
-              명지대학교 SW인재육성사업단 기간제 전담직원 채용
-              공고ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㄹ
-            </Text>
-            <Text style={styles.NoticeDate}>2023-06-27</Text>
-          </View>
-          <View style={[styles.contentBackground, styles.wideContent]}>
-            <Text style={styles.NoticeTitle}>
-              명지대학교 SW인재육성사업단 기간제 전담직원 채용
-              공고ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㄹ
-            </Text>
-            <Text style={styles.NoticeDate}>2023-06-27</Text>
-          </View>
-          <View style={[styles.contentBackground, styles.wideContent]}>
-            <Text style={styles.NoticeTitle}>
-              명지대학교 SW인재육성사업단 기간제 전담직원 채용
-              공고ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㄹ
-            </Text>
-            <Text style={styles.NoticeDate}>2023-06-27</Text>
-          </View>
-          <View style={[styles.contentBackground, styles.wideContent]}>
-            <Text style={styles.NoticeTitle}>
-              명지대학교 SW인재육성사업단 기간제 전담직원 채용
-              공고ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㄹ
-            </Text>
-            <Text style={styles.NoticeDate}>2023-06-27</Text>
-          </View>
-          <View style={[styles.contentBackground, styles.wideContent]}>
-            <Text style={styles.NoticeTitle}>
-              명지대학교 SW인재육성사업단 기간제 전담직원 채용
-              공고ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㄹ
-            </Text>
-            <Text style={styles.NoticeDate}>2023-06-27</Text>
-          </View>
-          <View style={[styles.contentBackground, styles.wideContent]}>
-            <Text style={styles.NoticeTitle}>
-              명지대학교 SW인재육성사업단 기간제 전담직원 채용
-              공고ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㄹ
-            </Text>
-            <Text style={styles.NoticeDate}>2023-06-27</Text>
-          </View>
-          <View style={[styles.contentBackground, styles.wideContent]}>
-            <Text style={styles.NoticeTitle}>
-              명지대학교 SW인재육성사업단 기간제 전담직원 채용
-              공고ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㄹ
-            </Text>
-            <Text style={styles.NoticeDate}>2023-06-27</Text>
-          </View>
-          <Text>~~페이지네이션이 들어갈자리~~</Text>
+          <SearchBar onSearch={handleSearch} placeholder="공지사항 검색" />
+          <FlatList
+            // onEndReached={onEndReached}
+            onEndReachedThreshold={0.6}
+            ListFooterComponent={loading && <ActivityIndicator />}
+            data={data}
+            keyExtractor={(_) => _.noticeId}
+            renderItem={({ item }) => {
+              const { title, pubDate, link } = item;
+              return <NoticeBtn title={title} pubDate={pubDate} link={link} />;
+            }}
+            ListEmptyComponent={printNoData()} //검색결과가 없을 시
+          />
         </View>
       </Pressable>
     </KeyboardAvoidingView>
@@ -121,6 +156,30 @@ const styles = StyleSheet.create({
   },
   columnWrapper: {
     flexDirection: 'column',
+  },
+  noDataContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  noDataText: {
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: GRAY,
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  noDataSubTextContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 30,
+  },
+  noDataSubText: {
+    textAlign: 'left',
+    fontSize: 16,
+    fontWeight: 'semi-bold',
+    color: GRAY,
   },
 });
 export default NormalNoticeScreen;
