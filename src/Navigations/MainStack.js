@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainScreen from '../Screens/MainScreen';
-import NormalNoticeScreen from '../Screens/NormalNoticeScreen';
+import NormalNoticeScreen from '../Screens/NoticeScreen/NormalNoticeScreen';
 import UserScreen from '../Screens/UserScreen';
 import UserEditScreen from '../Screens/UserEditScreen/UserEditScreen';
 import CreditScreen from '../Screens/CreditScreen';
@@ -17,12 +17,13 @@ const MainStack = () => {
     <Stack.Navigator
       screenOptions={{
         contentStyle: { backgroundColor: WHITE },
-        headerTitleAlign: 'center',
-        headerTitleStyle: { fontWeight: '900' },
-        headerBackTitleVisible: false,
-        headerTitle: 'APP_NAME',
-        headerLeft: () => <HeaderLeftButton />,
-        headerRight: () => <HeaderRightButton />,
+        headerShown: false,
+        // headerTitleAlign: 'center',
+        // headerTitleStyle: { fontWeight: '900' },
+        // headerBackTitleVisible: false,
+        // headerTitle: 'APP_NAME',
+        // headerLeft: () => <HeaderLeftButton />,
+        // headerRight: () => <HeaderRightButton />,
       }}
     >
       <Stack.Screen name={'Main'} component={MainScreen} />
@@ -62,8 +63,7 @@ const MainStack = () => {
         options={{ headerTitle: '시간표'}}
       />
        
-      
-    </Stack.Navigator>
+      </Stack.Navigator>
   );
 };
 export default MainStack;

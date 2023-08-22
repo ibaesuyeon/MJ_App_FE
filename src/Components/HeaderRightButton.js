@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 30,
     height: 30,
-    marginHorizontal: 5,
+    marginHorizontal: 20,
+    marginVertical: 20,
   },
 });
 export default HeaderRightButton;
