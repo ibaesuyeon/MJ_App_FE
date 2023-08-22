@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Table, TableWrapper, Row, Rows } from 'react-native-table-component';
 import {
@@ -6,18 +6,49 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { GRAY } from '../Colors';
+import axios from 'axios';
 
-const CreditTable = () => {
-  const [tableData, setTableData] = useState([
-    ['공통교양', '0', '18'],
-    ['학문기초교양', '0', '18'],
-    ['전공', '0', '18'],
+const CreditTable = (props) => {
+
+  const { usermajorId } = props;
+
+    const [tableData, setTableData] = useState([
+    ['공통교양', '0', '18'],  
+    ['핵심교양', '0', '18'],
+    ['학문기초교양', '0', `18`],
     ['채플이수횟수', '0', '18'],
-    ['공통교양', '0', '18'],
-    ['학문기초교양', '0', '18'],
     ['전공', '0', '18'],
-    ['채플이수횟수', '0', '18'],
+    ['일반교양', '0', '18'],
+    ['자유', '0', '18'],
+    ['총학점', '0', '18'],
   ]);
+ 
+  useEffect( () => {
+    console.log("학점내용 가져오기");
+    axios.get(`http://192.168.200.128:8080/credits/get/${usermajorId}` )
+  .then(response => {
+  
+    console.log(response.data);
+    const newData = [...tableData];
+
+    newData[0][2] = response.data.data.commonElectiveCredits;
+    newData[1][2] = response.data.data.coreElectiveCredits;
+    newData[2][2] = response.data.data.collegeElectiveCredits;
+    newData[3][2] = response.data.data.chapel;
+    newData[4][2] = response.data.data.majorCredits;
+    newData[5][2] = response.data.data.generalElectiveCredits;
+    newData[6][2] = response.data.data.freeCredits;
+    newData[7][2] = response.data.data.totalCredits;
+
+    setTableData(newData);
+  })
+  .catch(error => {
+    console.log(error);
+
+  });
+  
+  },[])
+
 
   return (
     <View style={styles.container}>
@@ -49,163 +80,8 @@ const styles = StyleSheet.create({
     width: wp('80%'),
   },
   text: {
-    textAlign: 'center',
+    textAlign: 'center', 
   },
 });
 
 export default CreditTable;
-
-// import React, { Component } from 'react';
-// import { StyleSheet, View } from 'react-native';
-// import { Table, TableWrapper, Rows, Col } from 'react-native-reanimated-table';
-// import {
-//   widthPercentageToDP as wp,
-//   heightPercentageToDP as hp,
-// } from 'react-native-responsive-screen';
-
-// export default class CreditTable extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       tableTitle: ['Title', 'Title2', 'Title3', 'Title4'],
-//       tableData: [
-//         ['1', '2', '3'],
-//         ['a', 'b', 'c'],
-//         ['1', '2', '3'],
-//         ['a', 'b', 'c'],
-//       ],
-//     };
-//   }
-
-//   render() {
-//     const state = this.state;
-//     return (
-//       <View style={styles.container}>
-//         <Table borderStyle={{ borderWidth: 1 }}>
-//           <TableWrapper style={styles.rowWrapper}>
-//             <Col
-//               data={state.tableTitle}
-//               style={styles.title}
-//               heightArr={[hp('5%'), hp('5%'), hp('5%'), hp('5%')]}
-//               widthArr={[wp('5%'), wp('5%'), wp('5%'), wp('5%')]}
-//               // flexArr={[1, 1, 1, 1]}
-//               textStyle={styles.text}
-//             />
-//             <Rows
-//               data={state.tableData}
-//               flexArr={[1, 1, 1]}
-//               style={styles.row}
-//               textStyle={styles.text}
-//             />
-//           </TableWrapper>
-//         </Table>
-//       </View>
-//     );
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: wp('5%'),
-//     paddingTop: hp('5%'),
-//     backgroundColor: '#fff',
-//   },
-//   rowWrapper: {
-//     flexDirection: 'row',
-//   },
-//   title: {
-//     flex: 1,
-//     backgroundColor: '#f6f8fa',
-//     height: hp('5%'),
-//     width: wp('40%'),
-//   },
-//   row: {
-//     height: hp('5%'),
-//     width: wp('40%'),
-//   },
-//   text: {
-//     textAlign: 'center',
-//   },
-// });
-
-// import React, { Component } from 'react';
-// import { StyleSheet, View, Text } from 'react-native';
-// import {
-//   widthPercentageToDP as wp,
-//   heightPercentageToDP as hp,
-// } from 'react-native-responsive-screen';
-
-// export default class CreditTable extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       tableTitle: ['Title', 'Title2', 'Title3', 'Title4'],
-//       tableData: [
-//         ['1', '2', '3'],
-//         ['a', 'b', 'c'],
-//         ['1', '2', '3'],
-//         ['a', 'b', 'c'],
-//       ],
-//     };
-//   }
-
-//   render() {
-//     const { tableTitle, tableData } = this.state;
-//     return (
-//       <View style={styles.container}>
-//         {/* Table Header */}
-//         <View style={styles.rowWrapper}>
-//           {tableTitle.map((title, index) => (
-//             <View key={index} style={styles.title}>
-//               <Text style={styles.text}>{title}</Text>
-//             </View>
-//           ))}
-//         </View>
-//         {/* Table Data */}
-//         {tableData.map((rowData, rowIndex) => (
-//           <View key={rowIndex} style={styles.rowWrapper}>
-//             {rowData.map((data, colIndex) => (
-//               <View key={colIndex} style={styles.row}>
-//                 <Text style={styles.text}>{data}</Text>
-//               </View>
-//             ))}
-//           </View>
-//         ))}
-//       </View>
-//     );
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: wp('5%'),
-//     paddingTop: hp('5%'),
-//     backgroundColor: '#fff',
-//   },
-//   rowWrapper: {
-//     flexDirection: 'row',
-//     flexWrap: 'wrap', // 행이 너무 길 경우, 자동으로 줄 바꿈 처리
-//   },
-//   title: {
-//     flex: 1,
-//     backgroundColor: '#f6f8fa',
-//     minWidth: wp('25%'), // 최소 너비 설정
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     borderWidth: 1,
-//     borderColor: '#ccc',
-//   },
-//   row: {
-//     flex: 1,
-//     minWidth: wp('25%'), // 최소 너비 설정
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     borderWidth: 1,
-//     borderColor: '#ccc',
-//   },
-//   text: {
-//     textAlign: 'center',
-//   },
-// });

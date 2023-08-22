@@ -30,19 +30,20 @@ const Navigation = () => {
     setIsId(true);
   })
   .catch(error => {
-    if (error.response) {
-      // 서버 응답이 있는 경우 (오류 응답)
-      console.log(error);
-      console.log('Response Data:', error.response.data);
-      console.log('Response Status:', error.response.status);
-      console.log('Response Headers:', error.response.headers);
-    } else if (error.request) {
-      // 서버 응답이 없는 경우 (요청 오류)
-      console.log('Request Error:', error.request);
-    } else {
-      // 기타 오류
-      console.log('Error Message:', error.message);
-    }
+    console.log(error);
+    // if (error.response) {
+    //   // 서버 응답이 있는 경우 (오류 응답)
+    //   console.log(error);
+    //   console.log('Response Data:', error.response.data);
+    //   console.log('Response Status:', error.response.status);
+    //   console.log('Response Headers:', error.response.headers);
+    // } else if (error.request) {
+    //   // 서버 응답이 없는 경우 (요청 오류)
+    //   console.log('Request Error:', error.request);
+    // } else {
+    //   // 기타 오류
+    //   console.log('Error Message:', error.message);
+    // }
   });
   },[])
 
