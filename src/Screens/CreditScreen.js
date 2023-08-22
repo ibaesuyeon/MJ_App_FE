@@ -6,14 +6,12 @@ import {
   Text,
   KeyboardAvoidingView,
   Pressable,
-  SafeAreaView,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { BLACK, GRAY } from '../Colors';
+import { WHITE } from '../Colors';
 import CreditTable from '../Components/CreditTable';
 
 const CreditScreen = () => {
@@ -60,6 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
+    backgroundColor: WHITE,
   },
   contentBackground: {
     backgroundColor: '#f6f6f6',

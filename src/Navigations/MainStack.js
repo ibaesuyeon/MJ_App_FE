@@ -12,14 +12,16 @@ const MainStack = () => {
     <Stack.Navigator
       screenOptions={{
         contentStyle: { backgroundColor: WHITE },
-        headerTitleAlign: 'center',
-        headerTitleStyle: { fontWeight: '900' },
-        headerBackTitleVisible: false,
-        headerTitle: 'APP_NAME',
-        headerLeft: () => <HeaderLeftButton />,
-        headerRight: () => <HeaderRightButton />,
+        headerShown: false,
+        // headerTitleAlign: 'center',
+        // headerTitleStyle: { fontWeight: '900' },
+        // headerBackTitleVisible: false,
+        // headerTitle: 'APP_NAME',
+        // headerLeft: () => <HeaderLeftButton />,
+        // headerRight: () => <HeaderRightButton />,
       }}
     >
+      <Stack.Screen name={'Main'} component={MainScreen} />
       <Stack.Screen
         name={'Credit'}
         component={CreditScreen}
@@ -30,7 +32,6 @@ const MainStack = () => {
         component={NormalNoticeScreen}
         options={{ headerTitle: '일반 공지' }}
       />
-      <Stack.Screen name={'Main'} component={MainScreen} />
     </Stack.Navigator>
   );
 };

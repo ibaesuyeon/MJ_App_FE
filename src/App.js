@@ -1,12 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Navigation from './Navigations/Navigation';
+import 'react-native-gesture-handler';
 import MainScreen from './Screens/MainScreen';
+import DrawerNavigation from './Navigations/DrawerNavigation';
 
 const App = () => {
   return (
     <View style={styles.container}>
-      <Navigation />
+      <DrawerNavigation />
+      {/* <Navigation /> */}
       <StatusBar style="auto" />
     </View>
   );

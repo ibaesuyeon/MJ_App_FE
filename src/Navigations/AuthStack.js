@@ -6,8 +6,8 @@ import WelCampusScreen from '../Screens/WelcomeScreen/WelCampusScreen';
 import WelSYearScreen from '../Screens/WelcomeScreen/WelSYearScreen';
 import WelEndScreen from '../Screens/WelcomeScreen/WelEndScreen';
 
-const Stack = createNativeStackNavigator();
 const AuthStack = () => {
+  const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
       screenOptions={{
