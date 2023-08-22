@@ -8,7 +8,8 @@ import { BLACK, WHITE } from '../Colors';
 import HeaderLeftButton from '../Components/HeaderLeftButton';
 import HeaderRightButton from '../Components/HeaderRightButton';
 import AlermSettingScreen from '../Screens/AlermSettingScreen';
-import UserCourseScreen from '../Screens/UserCourseScreen/UserCourseScreen';
+import UserCourseFirstScreen from '../Screens/UserCourseScreen/UserCourseFirstScreen';
+import UserCourseSecondScreen from '../Screens/UserCourseScreen/UserCourseSecondScreen';
 
 const MainStack = () => {
   const Stack = createNativeStackNavigator();
@@ -52,9 +53,15 @@ const MainStack = () => {
       />
        <Stack.Screen
         name={'UserTable'}
-        component={UserCourseScreen}
+        component={UserCourseFirstScreen}
         options={{ headerTitle: '시간표'}}
       />
+      <Stack.Screen
+        name={'UserTable2'}
+        component={UserCourseSecondScreen}
+        options={{ headerTitle: '시간표'}}
+      />
+       
       
     </Stack.Navigator>
   );

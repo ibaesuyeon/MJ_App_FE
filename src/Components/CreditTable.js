@@ -22,7 +22,7 @@ const CreditTable = (props) => {
     ['자유', '0', '18'],
     ['총학점', '0', '18'],
   ]);
-
+ 
   useEffect( () => {
     console.log("학점내용 가져오기");
     axios.get(`http://192.168.200.128:8080/credits/get/${usermajorId}` )
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     width: wp('80%'),
   },
   text: {
-    textAlign: 'center',
+    textAlign: 'center', 
   },
 });
 

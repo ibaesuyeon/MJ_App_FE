@@ -9,21 +9,59 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
+  Linking
 } from 'react-native';
+import { useEffect, useState } from 'react';
 import SearchBar from '../Components/SearchBar';
 import { useNavigation } from '@react-navigation/native';
 import {
   widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
+  heightPercentageToDP as hp, 
 } from 'react-native-responsive-screen';
 import { Divider } from '@rneui/themed';
 import { BLACK, GRAY } from '../Colors';
 import MJ_logo from '../../assets/MJ_logo.png';
 import Icon_Ft from 'react-native-vector-icons/Feather';
 import { AuthRoutes } from '../Navigations/routes';
+import axios from 'axios';
+
+import Constants from 'expo-constants';
 
 const MainScreen = () => {
   const navigation = useNavigation();
+  const [userId, setUserId] = useState("");
+  const [data, setData] = useState(0);
+
+  useEffect( () => {
+
+  axios.get(`http://192.168.200.128:8080/user/user/device/${Constants.installationId}`)
+  .then(response => {
+    console.log(response.data);
+  
+    setUserId(response.data.data.userId);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+
+  console.log(userId);
+  axios.get(`http://192.168.200.128:8080/myCourse/grade/${userId}/all`)
+  .then(response => {
+    console.log(response.data);
+    console.log(response.data.data);
+    setData(response.data.data);
+
+  })
+  .catch(error => {
+    console.log(error);
+  });
+
+  },[])
+
+  const handleOpenURL = () => {
+    const url = 'https://www.mju.ac.kr/mjukr/262/subview.do'
+    Linking.openURL(url);
+  };
 
   // function MainScreen() {
   return (
@@ -56,20 +94,24 @@ const MainScreen = () => {
                 <Text style={styles.contentTitle}>단과대별 공지사항 </Text>
               </View>
               <View style={[styles.contentBackground, styles.smallContent]}>
-                <Text style={styles.contentTitle}>마이아이캡 공지사항</Text>
+                <Text style={styles.contentTitle}>마이아이캡 공지사항</Text> 
               </View>
-            </View>
+            </View> 
           </View>
           <Divider />
-          <View style={[styles.contentBackground, styles.menuContent]}></View>
           <Text style={styles.headLine2}>이수학점</Text>
           <TouchableOpacity  onPress={() => navigation.navigate(AuthRoutes.CREDIT)}>
-            <View style={[styles.contentBackground, styles.mapContent]}></View>
+            <View style={[styles.contentBackground, styles.wideContent]}>
+              <Text style={styles.majorMain}>학점 : {data}</Text>
+            </View>
           </TouchableOpacity>
-
-          <View style={[styles.contentBackground, styles.menuContent]}></View>
-          <Text style={styles.headLine2}>캠퍼스맵</Text>
-          <View style={[styles.contentBackground, styles.mapContent]}></View>
+          <Text style={styles.headLine2}>학사일정</Text>
+          <TouchableOpacity onPress={handleOpenURL}>
+            <View style={[styles.contentBackground, styles.mapContent]}>
+              <Text style={styles.contentTitle}>추후 업데이트 예정입니다..!</Text>
+              <Text style={styles.contentTitle}>현재 학교 사이트 이동 가능합니다</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </Pressable>
     </KeyboardAvoidingView>
@@ -142,6 +184,14 @@ const styles = StyleSheet.create({
   },
   contentTitle: {
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  majorMain: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  majorsub: {
+    fontSize: 10,
     fontWeight: 'bold',
   },
   rowWrapper: {
