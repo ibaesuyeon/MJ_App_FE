@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainScreen from '../Screens/MainScreen';
-import NormalNoticeScreen from '../Screens/NormalNoticeScreen';
+import NormalNoticeScreen from '../Screens/NoticeScreen/NormalNoticeScreen';
 import CreditScreen from '../Screens/CreditScreen';
 import { BLACK, WHITE } from '../Colors';
 import HeaderLeftButton from '../Components/HeaderLeftButton';

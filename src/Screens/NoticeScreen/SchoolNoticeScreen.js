@@ -11,18 +11,18 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import SearchBar from '../Components/SearchBar';
-import NoticeBtn from '../Components/NoticeBtn';
+import SearchBar from '../../Components/SearchBar';
+import NoticeBtn from '../../Components/NoticeBtn';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { WHITE, GRAY } from '../Colors';
+import { WHITE, GRAY } from '../../Colors';
 import { useIsFocused } from '@react-navigation/native';
 
-const NormalNoticeScreen = () => {
+const SchoolNoticeScreen = () => {
   const [loading, setLoading] = useState(false);
-  const [category, setCategory] = useState('일반공지');
+  const [category, setCategory] = useState('학사공지');
   const [data, setData] = useState([]);
   const [keyword, setKeyword] = useState('');
   const isFocused = useIsFocused();
@@ -183,4 +183,4 @@ const styles = StyleSheet.create({
     color: GRAY,
   },
 });
-export default NormalNoticeScreen;
+export default SchoolNoticeScreen;
