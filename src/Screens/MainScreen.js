@@ -19,7 +19,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Divider } from '@rneui/themed';
-import { BLACK, GRAY } from '../Colors';
+import { WHITE } from '../Colors';
 import MJ_logo from '../../assets/MJ_logo.png';
 import Icon_Ft from 'react-native-vector-icons/Feather';
 import { AuthRoutes } from '../Navigations/routes';
@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
+    backgroundColor: WHITE,
   },
   logo: {
     width: 30,
