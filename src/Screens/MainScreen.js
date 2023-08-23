@@ -9,17 +9,17 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-  Linking
+  Linking,
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import SearchBar from '../Components/SearchBar';
 import { useNavigation } from '@react-navigation/native';
 import {
   widthPercentageToDP as wp,
-  heightPercentageToDP as hp, 
+  heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Divider } from '@rneui/themed';
-import { BLACK, GRAY } from '../Colors';
+import { WHITE } from '../Colors';
 import MJ_logo from '../../assets/MJ_logo.png';
 import Icon_Ft from 'react-native-vector-icons/Feather';
 import { AuthRoutes } from '../Navigations/routes';
@@ -27,12 +27,19 @@ import axios from 'axios';
 import { useIsFocused } from '@react-navigation/native';
 
 import Constants from 'expo-constants';
+import NoticeBtn from '../Components/NoticeBtn';
 
 const MainScreen = () => {
   const navigation = useNavigation();
+
   const [userId, setUserId] = useState("");
   const [userCollege, setUserCollege] = useState("");
   const [data, setData] = useState(0);
+  const [recentTitle, setRecentTitle] = useState('');
+  const [recentPubDate, setRecentPubDate] = useState('');
+  const [recentLink, setRecentLink] = useState('');
+  const isFocused = useIsFocused();
+
 
   useEffect( () => {
 
@@ -54,15 +61,17 @@ const MainScreen = () => {
     console.log(response.data.data);
     setData(response.data.data);
 
-  })
-  .catch(error => {
-    console.log(error);
-  });
 
+        setUserId(response.data.data.userId);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },[userId])
 
+
   const handleOpenURL = () => {
-    const url = 'https://www.mju.ac.kr/mjukr/262/subview.do'
+    const url = 'https://www.mju.ac.kr/mjukr/262/subview.do';
     Linking.openURL(url);
   };
 
@@ -80,14 +89,15 @@ const MainScreen = () => {
             <Image source={MJ_logo} style={styles.logo} />
             <Text style={styles.headLine1}>명지대학교 최근 공지사항</Text>
           </View>
-          <View style={[styles.contentBackground, styles.wideContent]}>
-            <Text>
-              최근 공지사항 내용이 들어가며 해당 공지로 연결되는 버튼의 기능을
-              합니다
-            </Text>
-          </View>
+          <NoticeBtn
+            title={recentTitle}
+            pubDate={recentPubDate}
+            link={recentLink}
+          />
           <View style={styles.rowWrapper}>
-            <TouchableOpacity  onPress={() => navigation.navigate(AuthRoutes.NORMALNOTICE)}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(AuthRoutes.NORMALNOTICE)}
+            >
               <View style={[styles.contentBackground, styles.mediumContent]}>
                 <Text style={styles.contentTitle}>명지대학교 공지사항</Text>
               </View>
@@ -100,7 +110,9 @@ const MainScreen = () => {
           </View>
           <Divider />
           <Text style={styles.headLine2}>이수학점</Text>
-          <TouchableOpacity  onPress={() => navigation.navigate(AuthRoutes.CREDIT)}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(AuthRoutes.CREDIT)}
+          >
             <View style={[styles.contentBackground, styles.wideContent]}>
               <Text style={styles.majorMain}>학점 : {data}</Text>
             </View>
@@ -108,8 +120,12 @@ const MainScreen = () => {
           <Text style={styles.headLine2}>학사일정</Text>
           <TouchableOpacity onPress={handleOpenURL}>
             <View style={[styles.contentBackground, styles.mapContent]}>
-              <Text style={styles.contentTitle}>추후 업데이트 예정입니다..!</Text>
-              <Text style={styles.contentTitle}>현재 학교 사이트 이동 가능합니다</Text>
+              <Text style={styles.contentTitle}>
+                추후 업데이트 예정입니다..!
+              </Text>
+              <Text style={styles.contentTitle}>
+                현재 학교 사이트 이동 가능합니다
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -122,6 +138,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
+    backgroundColor: WHITE,
   },
   logo: {
     width: 30,

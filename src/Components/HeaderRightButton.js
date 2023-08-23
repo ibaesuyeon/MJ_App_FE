@@ -9,7 +9,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 const HeaderRightButton = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
   // if(!canGoBack) {
   //     return (
@@ -24,8 +24,7 @@ const HeaderRightButton = () => {
         size={30}
         style={[styles.logo, styles.header_right]}
         onPress={() => {
-          navigation.navigate(AuthRoutes.USER)
-          console.log('HeaderRightButton - user');
+          navigation.navigate(AuthRoutes.USER);
         }}
       />
     </Pressable>
@@ -36,7 +35,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 30,
     height: 30,
-    marginHorizontal: 5,
+    marginHorizontal: 20,
+    marginVertical: 20,
   },
 });
 export default HeaderRightButton;

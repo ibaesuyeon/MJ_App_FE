@@ -18,7 +18,7 @@ import {
   widthPercentageToDP as wp, 
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { BLACK, GRAY } from '../Colors';
+import { WHITE } from '../Colors';
 import CreditTable from '../Components/CreditTable';
 import { AuthRoutes } from '../Navigations/routes';
 
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
+    backgroundColor: WHITE,
   },
   contentBackground: {
     backgroundColor: '#f6f6f6',

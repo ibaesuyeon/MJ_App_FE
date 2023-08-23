@@ -20,9 +20,9 @@ import {
 import { WHITE, GRAY } from '../../Colors';
 import { useIsFocused } from '@react-navigation/native';
 
-const FestivalNoticeScreen = () => {
+const NormalNoticeScreen = () => {
   const [loading, setLoading] = useState(false);
-  const [category, setCategory] = useState('행사공지');
+  const [category, setCategory] = useState('경영대공지');
   const [data, setData] = useState([]);
   const [keyword, setKeyword] = useState('');
   const isFocused = useIsFocused();
@@ -33,12 +33,11 @@ const FestivalNoticeScreen = () => {
       let response;
       if (keyword.trim() === '') {
         response = await axios.get(
-          `http://192.168.200.128:8080/notice/${encodeURIComponent(category)}`
+          `http://192.168.123.109:8080/notice/${encodeURIComponent(category)}`
         );
       } else {
         response = await axios.get(
-          `http://192.168.200.128:8080/notice/${encodeURIComponent(
-
+          `http://192.168.123.109:8080/notice/${encodeURIComponent(
             category
           )}/search/${encodeURIComponent(keyword)}`
         );
@@ -184,4 +183,4 @@ const styles = StyleSheet.create({
     color: GRAY,
   },
 });
-export default FestivalNoticeScreen;
+export default NormalNoticeScreen;
