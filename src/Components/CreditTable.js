@@ -9,10 +9,10 @@ import { GRAY } from '../Colors';
 import axios from 'axios';
 import Constants from 'expo-constants';
 
-const CreditTable = (props) => {
+const CreditTable = () => {
 
   const [userId, setUserId] = useState("");
-  const { usermajorId} = props; 
+  const [userMajorId, setUserMajorId] = useState("");
 
     const [tableData, setTableData] = useState([
     ['공통교양', '0', '18'],  
@@ -33,17 +33,19 @@ const CreditTable = (props) => {
     const data = response.data;
     const objects = [];
 
-    console.log("durl");
+    console.log("로그인정보");
     setUserId(response.data.data.userId);
+    setUserMajorId(response.data.data.userMajorId);
   })
   .catch(error => {
     console.log(error);
   });
 
     console.log("학점내용 가져오기");
-    axios.get(`http://192.168.200.128:8080/credits/get/${usermajorId}`)
+    console.log(userMajorId);
+    axios.get(`http://192.168.200.128:8080/credits/get/${userMajorId}`)
   .then(response => {
-  
+   
     console.log(response.data);
     const newData = [...tableData];
 
@@ -85,7 +87,7 @@ const CreditTable = (props) => {
 
   });
   
-  },[userId])
+  },[userId, userMajorId])
 
 
   return (

@@ -67,7 +67,7 @@ const MainScreen = () => {
       .catch((error) => {
         console.log(error);
       });
-  },[userId])
+  },[userCollege])
 
 
   const handleOpenURL = () => {
@@ -84,16 +84,16 @@ const MainScreen = () => {
     >
       <Pressable style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
-          <SearchBar placeholder="공지사항 검색"></SearchBar>
+          <SearchBar placeholder="공지사항 검색(차후 업데이트)"></SearchBar>
           <View style={styles.rowWrapper}>
             <Image source={MJ_logo} style={styles.logo} />
             <Text style={styles.headLine1}>명지대학교 최근 공지사항</Text>
           </View>
-          <NoticeBtn
+          <NoticeBtn>
             title={recentTitle}
             pubDate={recentPubDate}
             link={recentLink}
-          />
+          </NoticeBtn>
           <View style={styles.rowWrapper}>
             <TouchableOpacity
               onPress={() => navigation.navigate(AuthRoutes.NORMALNOTICE)}
