@@ -25,49 +25,50 @@ import Icon_Ft from 'react-native-vector-icons/Feather';
 import { AuthRoutes } from '../Navigations/routes';
 import axios from 'axios';
 import { useIsFocused } from '@react-navigation/native';
+
 import Constants from 'expo-constants';
 import NoticeBtn from '../Components/NoticeBtn';
 
 const MainScreen = () => {
   const navigation = useNavigation();
-  const [userId, setUserId] = useState('');
+
+  const [userId, setUserId] = useState("");
+  const [userCollege, setUserCollege] = useState("");
   const [data, setData] = useState(0);
   const [recentTitle, setRecentTitle] = useState('');
   const [recentPubDate, setRecentPubDate] = useState('');
   const [recentLink, setRecentLink] = useState('');
   const isFocused = useIsFocused();
 
-  useEffect(() => {
-    axios
-      .get(
-        `http://192.168.123.109:8080/user/user/device/${Constants.installationId}`
-      )
-      .then((response) => {
-        console.log(response.data);
+
+  useEffect( () => {
+
+  axios.get(`http://192.168.200.128:8080/user/user/device/${Constants.installationId}`)
+  .then(response => {
+    console.log(response.data);
+  
+    setUserId(response.data.data.userId);
+    setUserCollege(response.data.data.userCollegeId);
+  }) 
+  .catch(error => {
+    console.log(error);
+  });
+
+  console.log(userId);
+  axios.get(`http://192.168.200.128:8080/myCourse/grade/${userId}/all`)
+  .then(response => {
+    console.log(response.data);
+    console.log(response.data.data);
+    setData(response.data.data);
+
 
         setUserId(response.data.data.userId);
       })
       .catch((error) => {
         console.log(error);
       });
+  },[userId])
 
-    console.log(userId);
-    axios
-      .get(`http://192.168.123.109:8080/myCourse/grade/${userId}/all`)
-      .then((response) => {
-        console.log(response.data);
-        console.log(response.data.data);
-        setData(response.data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    axios.get(`http://192.168.123.109:8080/notice/recent`).then((response) => {
-      setRecentTitle(response.data.data.title);
-      setRecentPubDate(response.data.data.pubDate);
-      setRecentLink(response.data.data.link);
-    });
-  }, [isFocused]);
 
   const handleOpenURL = () => {
     const url = 'https://www.mju.ac.kr/mjukr/262/subview.do';
@@ -101,14 +102,11 @@ const MainScreen = () => {
                 <Text style={styles.contentTitle}>명지대학교 공지사항</Text>
               </View>
             </TouchableOpacity>
-            <View style={styles.columnWrapper}>
-              <View style={[styles.contentBackground, styles.smallContent]}>
+            <View style={styles.rowWrapper}>
+              <View style={[styles.contentBackground, styles.mediumContent]}>
                 <Text style={styles.contentTitle}>단과대별 공지사항 </Text>
               </View>
-              <View style={[styles.contentBackground, styles.smallContent]}>
-                <Text style={styles.contentTitle}>마이아이캡 공지사항</Text>
-              </View>
-            </View>
+            </View> 
           </View>
           <Divider />
           <Text style={styles.headLine2}>이수학점</Text>

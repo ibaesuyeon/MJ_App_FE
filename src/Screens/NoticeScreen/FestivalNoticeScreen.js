@@ -33,11 +33,12 @@ const FestivalNoticeScreen = () => {
       let response;
       if (keyword.trim() === '') {
         response = await axios.get(
-          `http://192.168.123.109:8080/notice/${encodeURIComponent(category)}`
+          `http://192.168.200.128:8080/notice/${encodeURIComponent(category)}`
         );
       } else {
         response = await axios.get(
-          `http://192.168.123.109:8080/notice/${encodeURIComponent(
+          `http://192.168.200.128:8080/notice/${encodeURIComponent(
+
             category
           )}/search/${encodeURIComponent(keyword)}`
         );

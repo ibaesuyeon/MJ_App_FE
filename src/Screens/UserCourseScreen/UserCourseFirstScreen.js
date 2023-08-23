@@ -80,7 +80,7 @@ useEffect( () => {
 
   console.log(userId);
   
-  axios.get(`http://192.168.200.128:8080/grade/${userId}/1/1학기`)
+  axios.get(`http://192.168.200.128:8080/grade/${userId}/1/SPRING`)
   .then(response => {
     const data = response.data;
     console.log(data);
