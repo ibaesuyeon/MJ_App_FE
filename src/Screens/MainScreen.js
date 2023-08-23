@@ -24,12 +24,14 @@ import MJ_logo from '../../assets/MJ_logo.png';
 import Icon_Ft from 'react-native-vector-icons/Feather';
 import { AuthRoutes } from '../Navigations/routes';
 import axios from 'axios';
+import { useIsFocused } from '@react-navigation/native';
 
 import Constants from 'expo-constants';
 
 const MainScreen = () => {
   const navigation = useNavigation();
   const [userId, setUserId] = useState("");
+  const [userCollege, setUserCollege] = useState("");
   const [data, setData] = useState(0);
 
   useEffect( () => {
@@ -39,7 +41,8 @@ const MainScreen = () => {
     console.log(response.data);
   
     setUserId(response.data.data.userId);
-  })
+    setUserCollege(response.data.data.userCollegeId);
+  }) 
   .catch(error => {
     console.log(error);
   });
@@ -56,7 +59,7 @@ const MainScreen = () => {
     console.log(error);
   });
 
-  },[])
+  },[userId])
 
   const handleOpenURL = () => {
     const url = 'https://www.mju.ac.kr/mjukr/262/subview.do'
@@ -89,12 +92,9 @@ const MainScreen = () => {
                 <Text style={styles.contentTitle}>명지대학교 공지사항</Text>
               </View>
             </TouchableOpacity>
-            <View style={styles.columnWrapper}>
-              <View style={[styles.contentBackground, styles.smallContent]}>
+            <View style={styles.rowWrapper}>
+              <View style={[styles.contentBackground, styles.mediumContent]}>
                 <Text style={styles.contentTitle}>단과대별 공지사항 </Text>
-              </View>
-              <View style={[styles.contentBackground, styles.smallContent]}>
-                <Text style={styles.contentTitle}>마이아이캡 공지사항</Text> 
               </View>
             </View> 
           </View>

@@ -7,10 +7,12 @@ import {
 } from 'react-native-responsive-screen';
 import { GRAY } from '../Colors';
 import axios from 'axios';
+import Constants from 'expo-constants';
 
 const CreditTable = (props) => {
 
-  const { usermajorId } = props;
+  const [userId, setUserId] = useState("");
+  const { usermajorId} = props; 
 
     const [tableData, setTableData] = useState([
     ['공통교양', '0', '18'],  
@@ -24,8 +26,22 @@ const CreditTable = (props) => {
   ]);
  
   useEffect( () => {
+    axios.get(`http://192.168.200.128:8080/user/user/device/${Constants.installationId}`)
+  .then(response => {
+    console.log(response.data);
+    console.log(response.data.data.userMajorId);
+    const data = response.data;
+    const objects = [];
+
+    console.log("durl");
+    setUserId(response.data.data.userId);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+
     console.log("학점내용 가져오기");
-    axios.get(`http://192.168.200.128:8080/credits/get/${usermajorId}` )
+    axios.get(`http://192.168.200.128:8080/credits/get/${usermajorId}`)
   .then(response => {
   
     console.log(response.data);
@@ -46,8 +62,30 @@ const CreditTable = (props) => {
     console.log(error);
 
   });
+
+  axios.get(`http://192.168.200.128:8080/myCourse/credits/${userId}`)
+  .then(response => {
   
-  },[])
+    console.log(response.data);
+    const newData = [...tableData];
+
+    newData[0][1] = response.data.data.myCommonElectiveCredits;
+    newData[1][1] = response.data.data.myCoreElectiveCredits;
+    newData[2][1] = response.data.data.myCollegeElectiveCredits;
+    newData[3][1] = response.data.data.myChapel;
+    newData[4][1] = response.data.data.myMajorCredits;
+    newData[5][1] = response.data.data.myGeneralElectiveCredits;
+    newData[6][1] = response.data.data.myFreeCredits;
+    newData[7][1] = response.data.data.myTotalCredits;
+
+    setTableData(newData);
+  })
+  .catch(error => {
+    console.log(error);
+
+  });
+  
+  },[userId])
 
 
   return (

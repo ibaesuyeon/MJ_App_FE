@@ -15,7 +15,7 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
 import {
-  widthPercentageToDP as wp,
+  widthPercentageToDP as wp, 
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { BLACK, GRAY } from '../Colors';
@@ -56,7 +56,7 @@ const CreditScreen = () => {
     console.log(error);
   });
   
-  },[])
+  },[userId])
 
   const handleOpenURL = () => {
     const url = 'https://www.mju.ac.kr/mjukr/257/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGbWp1a3IlMkYxNDMlMkYyMDI1ODAlMkZhcnRjbFZpZXcuZG8lM0ZwYWdlJTNEMSUyNnNyY2hDb2x1bW4lM0QlMjZzcmNoV3JkJTNEJTI2YmJzQ2xTZXElM0QlMjZiYnNPcGVuV3JkU2VxJTNEJTI2cmdzQmduZGVTdHIlM0QlMjZyZ3NFbmRkZVN0ciUzRCUyNmlzVmlld01pbmUlM0RmYWxzZSUyNmlzVmlldyUzRHRydWUlMjZwYXNzd29yZCUzRCUyNg%3D%3D';
@@ -84,7 +84,7 @@ const CreditScreen = () => {
           </View>
           <View style={[styles.contentBackground, styles.CreditTable]}>
             <Text style={styles.tableTitle}>이수 학점 내역</Text>
-            <CreditTable usermajorId={usermajorId} />
+            <CreditTable usermajorId={usermajorId}/>
           </View>
           <TouchableOpacity  onPress={() => navigation.navigate(AuthRoutes.USERTIMETABLE)}>
           <View
