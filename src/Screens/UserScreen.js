@@ -20,13 +20,11 @@ const UserScreen = () => {
 
     navigation.navigate(AuthRoutes.ALERM);
   };
-  const handleEditKeyword = () => {
+  // const handleEditKeyword = () => {
 
-    navigation.navigate(AuthRoutes.ALERMKEYWORD);
-  };
+  //   navigation.navigate(AuthRoutes.ALERMKEYWORD);
+  // };
   const handleEditProfile = () => {
-    console.log('사용자 정보 수정 클릭됨');
-
     navigation.navigate(AuthRoutes.USER_EDIT);
   };
 

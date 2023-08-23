@@ -60,7 +60,7 @@ const MainStack = () => {
         options={{ headerTitle: '알람 수정' }}
       />
       <Stack.Screen
-        name={'UserTable'}
+        name={"UserCourse"}
         component={UserCourseFirstScreen}
         options={{ headerTitle: '시간표' }}
       />

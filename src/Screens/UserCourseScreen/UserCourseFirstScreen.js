@@ -8,6 +8,7 @@ import {
   Pressable,
   TouchableOpacity,
   SafeAreaView,
+  Picker,
   ScrollView,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
@@ -22,18 +23,51 @@ import { Button, Overlay, Icon, Input, BottomSheet, ListItem} from '@rneui/theme
 import { AuthRoutes } from '../../Navigations/routes';
 
 const UserCourseFirstScreen = () => {
+
   const navigation = useNavigation();
 
   const [visible, setVisible] = useState(false);
   const [visibleGrade, setVisibleGrade] = useState(false);
   const [clickCourse, setClickCourse] = useState(-1);
   const [grade, setGrade] = useState("--");
+  const [userId, setUserId] = useState("");
 
   const [data, setData] = useState([]);
 
+  const [name, setName] = useState('');
+  const [credits, setCredits] = useState('');
+
+  const [ctype, setCtype] = useState('');
 
 const toggleOverlay = () => {
   setVisible(!visible);
+};
+
+const saveLecture = async () => {
+  console.log("w잘옴")
+  console.log(name)
+  console.log(credits)
+  console.log(ctype)
+  console.log(userId)
+  console.log("w잘옴")
+  try{
+    const response = await axios.post(`http://192.168.200.128:8080/myCourse/myCourse/register`, {
+      year: 1,
+      semester: "SPRING",
+      cname: name,
+      credits: credits,
+      ctype: ctype,
+      myCourseUserId: userId,
+    }
+    );
+    console.log("저장완료");
+
+    setVisible(!visible);
+
+  }catch(e){
+    console.log(e.response.data);
+    console.log(e.message);
+  }
 };
 
 const toggleOverlayGrade = (myCourseId) => {
@@ -83,11 +117,11 @@ useEffect( () => {
 
   axios.get(`http://192.168.200.128:8080/user/user/device/${Constants.installationId}`)
 .then(response => {
-  const userId = response.data.data.userId;
+  setUserId(response.data.data.userId);
 
   console.log(userId+"정보성공");
   
-  axios.get(`http://192.168.200.128:8080/myCourse/myCourse/${userId}/1/SPRING`)
+  axios.get(`http://192.168.200.128:8080/myCourse/myCourse/${response.data.data.userId}/1/SPRING`)
   .then(response => {
     const data = response.data;
     console.log(data);
@@ -120,6 +154,17 @@ useEffect( () => {
 });
 },[])
 
+const handleChangeName = (event) => {
+  console.log(event.nativeEvent.text)
+  setName(event.nativeEvent.text);
+};
+const handleChangeInfo = (event) => {
+  setCtype(event.nativeEvent.text);
+};
+const handleChangeCredits = (event) => {
+  setCredits(event.nativeEvent.text);
+};
+
   // function CreditScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -146,7 +191,7 @@ useEffect( () => {
                   ]}
                   >
                     <Text numberOfLines={1} style={styles.CurrentCreditTitle}>{item.name}</Text>
-                    <Text style={styles.CurrentCreditdetail}>{item.credit}</Text>
+                    <Text style={styles.CurrentCreditdetail}>{item.credit}학점</Text>
                     
                       {item.grade==null?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> -- </Text>:
                       item.grade=="A_PLUS"?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> A+ </Text>:
@@ -175,13 +220,14 @@ useEffect( () => {
                   containerStyle={{
                     width: wp('90%'),
                     height: hp('9%'),
-                  }}
+                  }} 
                   titleStyle={{ fontWeight: 'bold' }}
                   onPress={toggleOverlay}
                 />
               <Overlay overlayStyle={{ width: wp('90%')}} isVisible={visible} onBackdropPress={toggleOverlay}>
-              <Input placeholder='강의 제목 입력'/>
-              <Input placeholder='학점 입력(숫자만 입력해주세요!)'/>
+              <Input onChange={handleChangeName} placeholder='강의 제목 입력'/>
+              <Input onChange={handleChangeInfo} placeholder='강의 정보 입력'/>
+              <Input onChange={handleChangeCredits} placeholder='학점 입력(숫자만 입력해주세요!)'/>
               <Button
                 buttonStyle={{
                   backgroundColor: 'black',
@@ -190,7 +236,7 @@ useEffect( () => {
                   borderRadius: 30,
                 }}
                 title="저장하기"
-                onPress={toggleOverlay}
+                onPress={saveLecture}
               />
             </Overlay>
             <Button

@@ -12,6 +12,6 @@ export const AuthRoutes = {
 
   CREDIT: 'Credit',
   NORMALNOTICE: 'NormalNotice',
-  USERTIMETABLE: 'UserTable',
+  USERTIMETABLE: 'UserCourse',
   USERTIMETABLE2: 'UserTable2',
 };

@@ -10,10 +10,10 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthRoutes } from '../../Navigations/routes';
 
 import {CAMPUSITEM,SEOULMAJOR,YONGINMAJOR,SEOULMAJORHUMANITIES,SEOULMAJORSocialScience,SEOULMAJORManagement,
-  SEOULMAJORLAW,SEOULMAJORICT,SEOULMAJORFUTURE,SEOULMAJORBANGMOK,YONGINMAJORNATURAL,YONGINMAJORTECH,YONGINMAJORARTPHY,
-  YONGINMAJORARCHITECTURE,YONGINMAJORBANGMOK,YONGINMAJORINTER, YONGINMAJORICT} from '../../Components/major'
+  SEOULMAJORLAW,SEOULMAJORICT,SEOULMAJORFUTURE,YONGINMAJORNATURAL,YONGINMAJORTECH,YONGINMAJORARTPHY,
+  YONGINMAJORARCHITECTURE,YONGINMAJORINTER, YONGINMAJORICT} from '../../Components/major'
 
-const WelCampusScreen = () => {
+const UserEditScreen = () => {
   const navigation = useNavigation();
 
   const [userdbId, setUserdbId] = useState('');
@@ -148,14 +148,6 @@ const WelCampusScreen = () => {
             items={SEOULMAJORICT}
             value={detailMarjorValue}
           />
-          ):marjorValue=='13'?(
-            <RNPickerSelect
-            placeholder={""}
-            style={pickerSelectStyles}
-            onValueChange={handleDetailMajorChange}
-            items={SEOULMAJORBANGMOK}
-            value={detailMarjorValue}
-          />
           ):marjorValue=='6'?(
             <RNPickerSelect
             placeholder={""}
@@ -204,20 +196,12 @@ const WelCampusScreen = () => {
             items={YONGINMAJORICT}
             value={detailMarjorValue}
           />
-          ):marjorValue=='12'?(
+          ):(
             <RNPickerSelect
             placeholder={""}
             style={pickerSelectStyles}
             onValueChange={handleDetailMajorChange}
             items={YONGINMAJORINTER}
-            value={detailMarjorValue}
-          />
-          ):(
-            <RNPickerSelect
-            placeholder={"14"}
-            style={pickerSelectStyles}
-            onValueChange={handleDetailMajorChange}
-            items={YONGINMAJORBANGMOK}
             value={detailMarjorValue}
           />
           )}
@@ -321,4 +305,4 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-export default WelCampusScreen;
+export default UserEditScreen;

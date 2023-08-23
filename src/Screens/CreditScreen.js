@@ -86,7 +86,7 @@ const CreditScreen = () => {
             <Text style={styles.tableTitle}>이수 학점 내역</Text>
             <CreditTable />
           </View>
-          <TouchableOpacity  onPress={() => navigation.navigate(AuthRoutes.USERTIMETABLE)}>
+          <TouchableOpacity onPress={() => navigation.navigate("UserCourse")}>
           <View
             style={[
               styles.contentBackground,

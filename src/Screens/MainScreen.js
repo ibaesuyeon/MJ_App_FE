@@ -12,7 +12,7 @@ import {
   Linking,
 } from 'react-native';
 import { useEffect, useState } from 'react';
-import SearchBar from '../Components/SearchBar';
+import MainSearchBar from '../Components/MainSearchBar';
 import { useNavigation } from '@react-navigation/native';
 import {
   widthPercentageToDP as wp,
@@ -67,12 +67,37 @@ const MainScreen = () => {
       .catch((error) => {
         console.log(error);
       });
+      axios.get(`http://192.168.200.128:8080/notice/recent`).then((response) => {
+        console.log("최신게시물가져오기")
+        console.log(response.data)
+        setRecentTitle(response.data.data.title);
+        setRecentPubDate(response.data.data.pubDate);
+        setRecentLink(response.data.data.link);
+      });
   },[userCollege])
 
 
   const handleOpenURL = () => {
     const url = 'https://www.mju.ac.kr/mjukr/262/subview.do';
     Linking.openURL(url);
+  };
+
+  const checkUserMajor = () => {
+    if(userCollege==1){
+      navigation.navigate("HumNotice")
+    }
+    else if(userCollege==3){
+      navigation.navigate("BusinessNotice")
+    }
+    else if(userCollege==4){
+      navigation.navigate("LawNotice")
+    }
+    else if(userCollege==5){
+      navigation.navigate("IctNotice")
+    }
+    else{
+      navigation.navigate("SchoolNotice")
+    }
   };
 
   // function MainScreen() {
@@ -84,16 +109,16 @@ const MainScreen = () => {
     >
       <Pressable style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
-          <SearchBar placeholder="공지사항 검색(차후 업데이트)"></SearchBar>
+          <MainSearchBar placeholder="공지사항 검색"></MainSearchBar>
           <View style={styles.rowWrapper}>
             <Image source={MJ_logo} style={styles.logo} />
             <Text style={styles.headLine1}>명지대학교 최근 공지사항</Text>
           </View>
-          <NoticeBtn>
+          <NoticeBtn
             title={recentTitle}
             pubDate={recentPubDate}
             link={recentLink}
-          </NoticeBtn>
+          />
           <View style={styles.rowWrapper}>
             <TouchableOpacity
               onPress={() => navigation.navigate(AuthRoutes.NORMALNOTICE)}
@@ -102,11 +127,14 @@ const MainScreen = () => {
                 <Text style={styles.contentTitle}>명지대학교 공지사항</Text>
               </View>
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={checkUserMajor}>
             <View style={styles.rowWrapper}>
               <View style={[styles.contentBackground, styles.mediumContent]}>
-                <Text style={styles.contentTitle}>단과대별 공지사항 </Text>
+                <Text style={styles.contentTitle}> 단과대별 공지사항 </Text>
               </View>
             </View> 
+            </TouchableOpacity>
           </View>
           <Divider />
           <Text style={styles.headLine2}>이수학점</Text>

@@ -8,6 +8,7 @@ import {
   Pressable,
   TouchableOpacity,
   SafeAreaView,
+  Picker,
   ScrollView,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
@@ -22,40 +23,124 @@ import { Button, Overlay, Icon, Input, BottomSheet, ListItem} from '@rneui/theme
 import { AuthRoutes } from '../../Navigations/routes';
 
 const UserCourseSecondScreen = () => {
-  const navigation = useNavigation();
 
+  
   const route = useRoute();
   const dataReceived = route.params?.data || {};
-  const [year, setYear] = useState(dataReceived.years);
-  const [semester, setSemester] = useState(dataReceived.semesters);
+  let year = dataReceived.years;
+  let semester = dataReceived.semesters;
+  const [semesteren, setSemesteren] =  useState("");
+  const [yearen, setYearen] =  useState("");
+
+  const navigation = useNavigation();
+
   const [visible, setVisible] = useState(false);
   const [visibleGrade, setVisibleGrade] = useState(false);
+  const [clickCourse, setClickCourse] = useState(-1);
   const [grade, setGrade] = useState("--");
+  const [userId, setUserId] = useState("");
 
-      const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
 
+  const [name, setName] = useState('');
+  const [credits, setCredits] = useState('');
+
+  const [ctype, setCtype] = useState('');
 
 const toggleOverlay = () => {
   setVisible(!visible);
 };
 
-const toggleOverlayGrade = () => {
+const saveLecture = async () => {
+  console.log("w잘옴")
+  console.log(name)
+  console.log(credits)
+  console.log(ctype)
+  console.log(userId)
+  console.log("w잘옴")
+  try{
+    const response = await axios.post(`http://192.168.200.128:8080/myCourse/myCourse/register`, {
+      year: year,
+      semester: semesteren,
+      cname: name,
+      credits: credits,
+      ctype: ctype,
+      myCourseUserId: userId,
+    }
+    );
+    console.log("저장완료");
+
+    setVisible(!visible);
+
+  }catch(e){
+    console.log(e.response.data);
+    console.log(e.message);
+  }
+};
+
+const toggleOverlayGrade = (myCourseId) => {
+  setClickCourse(myCourseId);
+  console.log(myCourseId);
   setVisibleGrade(!visibleGrade);
 };
 
+const changeGrade = () => {
+  console.log(clickCourse);
+};
+
+const [isVisible, setIsVisible] = useState(false);
+
+const semesterenchange = () => {
+  console.log("Dfdfd"+" "+semester)
+  if(semester = 1){
+    setSemesteren("SPRING")
+  }
+  else{
+    setSemesteren("AUTUMN")
+  }
+};
+
+
+
 useEffect( () => {
+  console.log(semester+"이ㅏ이이잉");
+  if(semester == 1){
+    console.log("봄함");
+    setSemesteren("SPRING")
+  }
+  else{
+    console.log("가을되야함");
+    setSemesteren("AUTUMN")
+  } 
 
   axios.get(`http://192.168.200.128:8080/user/user/device/${Constants.installationId}`)
 .then(response => {
-  const userId = response.data.data.userId;
+  setUserId(response.data.data.userId);
 
-  console.log(userId);
+  console.log(userId+"정보성공");
+
+  console.log(year);
+  console.log(semesteren);
   
-  axios.get(`http://192.168.200.128:8080/grade/${userId}/1/1학기`)
+  axios.get(`http://192.168.200.128:8080/myCourse/myCourse/${response.data.data.userId}/${year}/${semesteren}`)
   .then(response => {
     const data = response.data;
     console.log(data);
     const objects = [];
+    
+    for (let i = 0; i < data.list.length; i++) {
+      const obj = {
+          myCourseId: data.list[i].myCourseId,
+          name: data.list[i].cname,
+          credit: data.list[i].credit,
+          grade: data.list[i].grade
+
+      };
+      console.log(obj);
+      objects.push(obj);
+  }
+  setData(objects);
+
     console.log("됨");
   })
   .catch(error => {
@@ -68,7 +153,18 @@ useEffect( () => {
 .catch(error => {
   console.log(error);
 });
-})
+},[userId])
+
+const handleChangeName = (event) => {
+  console.log(event.nativeEvent.text)
+  setName(event.nativeEvent.text);
+};
+const handleChangeInfo = (event) => {
+  setCtype(event.nativeEvent.text);
+};
+const handleChangeCredits = (event) => {
+  setCredits(event.nativeEvent.text);
+};
 
   // function CreditScreen() {
   return (
@@ -87,6 +183,7 @@ useEffect( () => {
             </View>
             <View style={styles.timetablecourse}>
 
+                  {data.map((item) => (
                   <View
                   style={[
                     styles.contentBackground,
@@ -94,28 +191,23 @@ useEffect( () => {
                     styles.rowWrapper,
                   ]}
                   >
-                    <Text numberOfLines={1} style={styles.CurrentCreditTitle}>절차적사고와 프로그래밍</Text>
-                    <Text style={styles.CurrentCreditdetail}>3학점</Text>
-                    <TouchableOpacity style={styles.button} onPress={toggleOverlayGrade}>
-                      <Text style={styles.buttonText}>{grade}</Text>
-                    </TouchableOpacity>
+                    <Text numberOfLines={1} style={styles.CurrentCreditTitle}>{item.name}</Text>
+                    <Text style={styles.CurrentCreditdetail}>{item.credit}학점</Text>
+                    
+                      {item.grade==null?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> -- </Text>:
+                      item.grade=="A_PLUS"?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> A+ </Text>:
+                      item.grade=="A0"?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> A </Text>:
+                      item.grade=="B_PLUS"?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> B+ </Text>:
+                      item.grade=="B0"?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> B </Text>:
+                      item.grade=="C_PLUS"?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> C+ </Text>:
+                      item.grade=="C0"?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> C </Text>:
+                      item.grade=="D_PLUS"?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> D+ </Text>:
+                      item.grade=="D0"?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> D </Text>:
+                      item.grade=="F"?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> F </Text>:
+                      item.grade=="P"?<Text onPress={toggleOverlayGrade} style={styles.buttonText}> P </Text>:
+                      <Text onPress={toggleOverlayGrade} style={styles.buttonText}> NP </Text>}
                   </View>
-
-                  {/* {data.map((item) => (
-                  <View
-                  style={[
-                    styles.contentBackground,
-                    styles.totalCredit,
-                    styles.rowWrapper,
-                  ]}
-                  >
-                    <Text numberOfLines={1} style={styles.CurrentCreditTitle}>{item.courseName}</Text>
-                    <Text style={styles.CurrentCreditdetail}>{item.credit}</Text>
-                    <TouchableOpacity style={styles.button} onPress={toggleOverlayGrade}>
-                      <Text style={styles.buttonText}>{item.grade}</Text>
-                    </TouchableOpacity>
-                  </View>
-                ))} */}
+                ))}
 
             </View>
               <Button
@@ -134,8 +226,9 @@ useEffect( () => {
                   onPress={toggleOverlay}
                 />
               <Overlay overlayStyle={{ width: wp('90%')}} isVisible={visible} onBackdropPress={toggleOverlay}>
-              <Input placeholder='강의 제목 입력'/>
-              <Input placeholder='학점 입력'/>
+              <Input onChange={handleChangeName} placeholder='강의 제목 입력'/>
+              <Input onChange={handleChangeInfo} placeholder='강의 정보 입력'/>
+              <Input onChange={handleChangeCredits} placeholder='학점 입력(숫자만 입력해주세요!)'/>
               <Button
                 buttonStyle={{
                   backgroundColor: 'black',
@@ -144,7 +237,7 @@ useEffect( () => {
                   borderRadius: 30,
                 }}
                 title="저장하기"
-                onPress={toggleOverlay}
+                onPress={saveLecture}
               />
             </Overlay>
             <Button
@@ -167,7 +260,7 @@ useEffect( () => {
           </View>
 {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
           <Overlay overlayStyle={{ width: wp('90%')}} isVisible={visibleGrade} onBackdropPress={toggleOverlayGrade}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={changeGrade}>
             <View style={styles.vertical}>
               <Icon style={styles.Icon}
               name='grin-stars'
@@ -185,16 +278,6 @@ useEffect( () => {
               color='black'
               />
               <Text style={styles.gradeText}>A</Text>
-            </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-            <View style={styles.vertical}>
-              <Icon style={styles.Icon}
-              name='grin-squint'
-              type='font-awesome-5'
-              color='black'
-              />
-              <Text style={styles.gradeText}>A-</Text>
             </View>
             </TouchableOpacity>
             <TouchableOpacity>
@@ -220,16 +303,6 @@ useEffect( () => {
             <TouchableOpacity>
             <View style={styles.vertical}>
               <Icon style={styles.Icon}
-             name='grin'
-             type='font-awesome-5'
-              color='black'
-              />
-              <Text style={styles.gradeText}>B-</Text>
-            </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-            <View style={styles.vertical}>
-              <Icon style={styles.Icon}
               name='grin-squint-tears'
               type='font-awesome-5'
               color='black'
@@ -250,15 +323,6 @@ useEffect( () => {
             <TouchableOpacity>
             <View style={styles.vertical}>
               <Icon style={styles.Icon}
-              name='grin-beam-sweat'
-              type='font-awesome-5'
-              color='black'
-              />
-              <Text style={styles.gradeText}>C-</Text>
-            </View>
-            </TouchableOpacity><TouchableOpacity>
-            <View style={styles.vertical}>
-              <Icon style={styles.Icon}
               name='grin-tongue-wink'
               type='font-awesome-5'
               color='black'
@@ -277,20 +341,31 @@ useEffect( () => {
             </TouchableOpacity><TouchableOpacity>
             <View style={styles.vertical}>
               <Icon style={styles.Icon}
-              name='grimace'
+              name='ghost'
               type='font-awesome-5'
               color='black'
               />
-              <Text style={styles.gradeText}>D-</Text>
+              <Text style={styles.gradeText}>F</Text>
             </View>
-            </TouchableOpacity><TouchableOpacity>
+            </TouchableOpacity>
+            <TouchableOpacity>
             <View style={styles.vertical}>
               <Icon style={styles.Icon}
               name='ghost'
               type='font-awesome-5'
               color='black'
               />
-              <Text style={styles.gradeText}>F</Text>
+              <Text style={styles.gradeText}>P</Text>
+            </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+            <View style={styles.vertical}>
+              <Icon style={styles.Icon}
+              name='ghost'
+              type='font-awesome-5'
+              color='black'
+              />
+              <Text style={styles.gradeText}>NP</Text>
             </View>
             </TouchableOpacity>
             </Overlay>

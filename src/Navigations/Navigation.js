@@ -24,10 +24,10 @@ const Navigation = () => {
     console.log(userId);
     axios
       .get(
-        `http://192.168.123.109:8080/user/user/device/${Constants.installationId}`
+        `http://192.168.200.128:8080/user/user/device/${Constants.installationId}`
       )
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data+"네비게이션");
 
         setIsId(true);
       })
